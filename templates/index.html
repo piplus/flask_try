@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="row mt-2">
+    <div class="btn-group">
+    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addModal">Add</button>
+    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+    </div>
+</div>
+<p class="h3">Items2</p>
+{% for row in items2 %}
+    <div class="row">
+    {% for items2 in row %}
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
+                    Item : {{items2['name']}}
+                    </div>
+                    <div class="card-body">
+                        <div class="card-img text-center" style="height: 150px;width: auto;object-fit: contain;">
+                            <img src="{{items2['img']}}" alt="" style="height: 150px; width: auto;border-radius: 10px;object-fit: contain;">
+                        </div>
+                    <p class="card-text">{{items2['desc']}}</p>
+                    <a href="item/{{items2['id']}}" class="btn btn-primary">Read more ...</a>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+    </div>
+{% endfor %}
+
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('index')}}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input class="form-control" type="file" id="formFile" name="file">
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Name: </label>
+                        <input type="text" class="form-control" name="name" id="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="desc" class="col-form-label">Description: </label>
+                        <textarea type="text" class="form-control" name="desc" id="desc"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete item</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('delete')}}" method="post" enctype="multipart/form-data">
+                    <select class="form-select" name="multiitems" multiple aria-label="multiple select example">
+                        {% for row in items2 %}
+                            {% for items2 in row%}
+                                <option value="{{items2}}">{{items2['name']}}</option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" onclick="confirmed()">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+{% endblock %}
